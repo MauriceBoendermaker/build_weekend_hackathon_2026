@@ -1,0 +1,26 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Shift Recovery Roster output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Normalized roster dataset (workers, shifts, events, summary)",
+            "template": "{{links.apiDefaultDatasetUrl}}/items?clean=true"
+        },
+        "workers": {
+            "type": "string",
+            "title": "Worker records only",
+            "template": "{{links.apiDefaultDatasetUrl}}/items?clean=true&view=workers"
+        },
+        "shifts": {
+            "type": "string",
+            "title": "Shift records only",
+            "template": "{{links.apiDefaultDatasetUrl}}/items?clean=true&view=shifts"
+        },
+        "summary": {
+            "type": "string",
+            "title": "Run summary (retrieval status and counts)",
+            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/SUMMARY"
+        }
+    }
+}

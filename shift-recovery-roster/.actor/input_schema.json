@@ -1,0 +1,217 @@
+{
+    "title": "Shift Recovery Roster Source input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "mode": {
+            "sectionCaption": "Source",
+            "sectionDescription": "Choose where scheduling data comes from. `live` and `hybrid` call the Cal.com API v2; `demo` makes no network calls and emits clearly-labelled synthetic data.",
+            "title": "Mode",
+            "type": "string",
+            "description": "live = Cal.com scheduling data only. hybrid = Cal.com scheduling data plus synthetic demo workforce metadata for any Cal.com user with no metadata entry. demo = fully synthetic hospital roster, no API calls, no credentials needed.",
+            "editor": "select",
+            "default": "live",
+            "enum": ["live", "hybrid", "demo"],
+            "enumTitles": [
+                "live - Cal.com only",
+                "hybrid - Cal.com + demo workforce metadata fallback",
+                "demo - synthetic data only (no API calls)"
+            ]
+        },
+        "apiKey": {
+            "title": "Cal.com API key",
+            "type": "string",
+            "description": "Cal.com API key (starts with `cal_`). Required for `live` and `hybrid` modes. Sent as an `Authorization: Bearer` header. Never logged. Falls back to the CAL_COM_API_KEY environment variable when left empty.",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "baseUrl": {
+            "title": "Cal.com API base URL",
+            "type": "string",
+            "description": "Base URL of the Cal.com API v2. Change only for self-hosted Cal.com instances.",
+            "editor": "textfield",
+            "default": "https://api.cal.com/v2",
+            "prefill": "https://api.cal.com/v2"
+        },
+        "startTime": {
+            "sectionCaption": "Time window",
+            "sectionDescription": "All timestamps in the output are ISO-8601 in UTC. Date-only values are interpreted as UTC midnight.",
+            "title": "Window start",
+            "type": "string",
+            "description": "Start of the scheduling window. Accepts an ISO-8601 timestamp (2026-09-26T00:00:00Z), a date (2026-09-26), `now`, or a relative offset such as `now-1d` / `now+2h`.",
+            "editor": "textfield",
+            "default": "now",
+            "prefill": "now"
+        },
+        "endTime": {
+            "title": "Window end",
+            "type": "string",
+            "description": "End of the scheduling window. Same formats as the window start. Must be after the window start.",
+            "editor": "textfield",
+            "default": "now+7d",
+            "prefill": "now+7d"
+        },
+        "maxDateRangeDays": {
+            "title": "Maximum window length (days)",
+            "type": "integer",
+            "description": "Safety cap on the window length. The run fails fast instead of paginating through an unbounded range.",
+            "default": 90,
+            "minimum": 1,
+            "maximum": 730
+        },
+        "teamIds": {
+            "sectionCaption": "Scope filters",
+            "sectionDescription": "Leave every filter empty to retrieve everything the API key can see.",
+            "title": "Team IDs",
+            "type": "array",
+            "description": "Restrict retrieval to these Cal.com team IDs. Empty = all teams the key can access.",
+            "editor": "stringList",
+            "default": []
+        },
+        "eventTypeIds": {
+            "title": "Event type IDs",
+            "type": "array",
+            "description": "Restrict bookings to these Cal.com event type IDs. Empty = all event types.",
+            "editor": "stringList",
+            "default": []
+        },
+        "usernames": {
+            "title": "Cal.com usernames",
+            "type": "array",
+            "description": "Restrict event-type lookups to these Cal.com usernames. Empty = the authenticated user and every accessible team.",
+            "editor": "stringList",
+            "default": []
+        },
+        "bookingStatuses": {
+            "title": "Booking statuses",
+            "type": "array",
+            "description": "Cal.com booking statuses to retrieve. Each status is a separate paginated API walk. Empty = a single unfiltered walk across all statuses.",
+            "editor": "select",
+            "default": ["upcoming"],
+            "prefill": ["upcoming"],
+            "items": {
+                "type": "string",
+                "enum": ["upcoming", "recurring", "past", "cancelled", "unconfirmed"]
+            }
+        },
+        "includeTeamMemberships": {
+            "sectionCaption": "What to retrieve",
+            "title": "Retrieve team memberships",
+            "type": "boolean",
+            "description": "Call /v2/teams and /v2/teams/{id}/memberships to discover the workforce roster. This is the primary worker source in live mode.",
+            "default": true
+        },
+        "includeEventTypes": {
+            "title": "Retrieve event types",
+            "type": "boolean",
+            "description": "Call /v2/event-types and /v2/teams/{id}/event-types to discover additional hosts and to resolve shift roles from event types.",
+            "default": true
+        },
+        "includeSchedules": {
+            "title": "Retrieve availability schedules",
+            "type": "boolean",
+            "description": "Call /v2/schedules and project the authenticated user's weekly availability into the requested window. Cal.com only exposes schedules for the authenticated user.",
+            "default": true
+        },
+        "emitSchedulingEvents": {
+            "title": "Emit raw scheduling events",
+            "type": "boolean",
+            "description": "Also emit one schedulingEvent record per Cal.com booking, next to the derived shift records. Useful for auditing what the scheduling system actually returned.",
+            "default": true
+        },
+        "employeeMetadata": {
+            "sectionCaption": "Workforce metadata",
+            "sectionDescription": "Cal.com does not store employee IDs, roles, departments, skills or contracted hours. Supply them here from your roster system. Every field that comes from this source is labelled workforce-metadata in the output, never cal.com. Do not put medical information or absence reasons in here.",
+            "title": "Employee metadata (inline)",
+            "type": "array",
+            "description": "Array of employee metadata objects, matched to Cal.com users by email (case-insensitive), then calUsername, then calUserId. Example item: {\"employeeId\": \"E101\", \"email\": \"sarah@example.com\", \"role\": \"ICU_NURSE\", \"department\": \"ICU\", \"skills\": [\"ICU\", \"BLS\"], \"contractedHoursPerWeek\": 36}",
+            "editor": "json",
+            "default": []
+        },
+        "employeeMetadataUrl": {
+            "title": "Employee metadata URL",
+            "type": "string",
+            "description": "HTTPS URL returning a JSON array of employee metadata objects, or an object with an `employees` array. Merged with the inline list; inline entries win on conflict.",
+            "editor": "textfield"
+        },
+        "employeeMetadataStoreKey": {
+            "title": "Employee metadata key-value store key",
+            "type": "string",
+            "description": "Key in an Apify key-value store holding a JSON array of employee metadata objects. Handy for keeping the roster out of the run input.",
+            "editor": "textfield"
+        },
+        "employeeMetadataStoreId": {
+            "title": "Employee metadata key-value store ID",
+            "type": "string",
+            "description": "ID or name of the key-value store to read the metadata key from. Defaults to the run's own key-value store.",
+            "editor": "textfield"
+        },
+        "shiftTypeMetadata": {
+            "title": "Shift type metadata",
+            "type": "array",
+            "description": "Maps Cal.com event types to shift requirements. Match on eventTypeId or eventTypeSlug. Example item: {\"eventTypeSlug\": \"icu-night-shift\", \"role\": \"ICU_NURSE\", \"department\": \"ICU\", \"requiredSkills\": [\"ICU\", \"BLS\"]}",
+            "editor": "json",
+            "default": []
+        },
+        "useDemoWorkforceMetadata": {
+            "title": "Fall back to demo workforce metadata",
+            "type": "boolean",
+            "description": "When a Cal.com user has no metadata entry, synthesize a clearly-labelled demo one. Always on in hybrid and demo modes. Such records are labelled demo-workforce-metadata and flagged synthetic true.",
+            "default": false
+        },
+        "pageSize": {
+            "sectionCaption": "Reliability and limits",
+            "title": "Page size",
+            "type": "integer",
+            "description": "Items requested per API page. Cal.com caps bookings at 100.",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 100
+        },
+        "maxPagesPerResource": {
+            "title": "Max pages per resource",
+            "type": "integer",
+            "description": "Hard stop on pagination loops per API resource. Reaching it is reported as a warning and marks the run partial.",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 10000
+        },
+        "maxRecordsPerResource": {
+            "title": "Max records per resource",
+            "type": "integer",
+            "description": "Hard stop on how many raw records are pulled per API resource.",
+            "default": 5000,
+            "minimum": 1,
+            "maximum": 500000
+        },
+        "requestTimeoutSecs": {
+            "title": "Request timeout (seconds)",
+            "type": "integer",
+            "description": "Per-request timeout. Timed-out requests are retried according to the retry limit.",
+            "default": 30,
+            "minimum": 1,
+            "maximum": 300
+        },
+        "maxRetries": {
+            "title": "Max retries",
+            "type": "integer",
+            "description": "Retries for network errors, request timeouts, HTTP 429 and HTTP 5xx, using exponential backoff with jitter and honouring Retry-After.",
+            "default": 4,
+            "minimum": 0,
+            "maximum": 10
+        },
+        "failOnEmptyResult": {
+            "title": "Fail when no workers are found",
+            "type": "boolean",
+            "description": "Fail the run when the API call succeeded but produced zero worker records. Leave off to get a successful run whose summary record carries emptyResult true. Either way, an API failure always fails the run - it never turns into an empty dataset.",
+            "default": false
+        },
+        "debug": {
+            "title": "Debug logging",
+            "type": "boolean",
+            "description": "Raise the log level to DEBUG. Credentials are censored at every log level.",
+            "default": false
+        }
+    },
+    "required": ["mode", "startTime", "endTime"]
+}

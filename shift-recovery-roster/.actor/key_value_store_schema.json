@@ -1,0 +1,19 @@
+{
+    "actorKeyValueStoreSchemaVersion": 1,
+    "title": "Shift Recovery Roster key-value store",
+    "description": "Machine-readable run report written alongside the dataset. Never contains credentials.",
+    "collections": {
+        "summary": {
+            "title": "Run summary",
+            "description": "The same summary record that is appended as the last dataset item: retrieval status, counts and date range.",
+            "key": "SUMMARY",
+            "contentTypes": ["application/json"]
+        },
+        "runReport": {
+            "title": "Run report",
+            "description": "Summary plus safe diagnostics: per-resource page counts, warnings and discarded-record reasons.",
+            "key": "RUN_REPORT",
+            "contentTypes": ["application/json"]
+        }
+    }
+}

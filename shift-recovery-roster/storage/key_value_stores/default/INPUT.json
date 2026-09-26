@@ -1,0 +1,7 @@
+{
+    "mode": "demo",
+    "startTime": "now",
+    "endTime": "now+3d",
+    "emitSchedulingEvents": true,
+    "debug": false
+}

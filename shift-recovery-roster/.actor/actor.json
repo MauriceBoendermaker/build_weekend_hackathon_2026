@@ -1,0 +1,18 @@
+{
+    "actorSpecification": 1,
+    "name": "shift-recovery-roster",
+    "title": "Shift Recovery Roster Source (Cal.com)",
+    "description": "Retrieves authorized scheduling data from Cal.com, enriches it with a configurable workforce metadata source, and emits a normalized, deduplicated, validated roster/shift dataset for an autonomous shift-recovery workflow.",
+    "version": "1.0",
+    "meta": {
+        "templateId": "ts_empty",
+        "generatedBy": "Claude Code with Claude Opus 5"
+    },
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json",
+        "keyValueStore": "./key_value_store_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
+}

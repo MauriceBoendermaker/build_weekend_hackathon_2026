@@ -1,0 +1,248 @@
+{
+    "actorSpecification": 1,
+    "fields": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Normalized roster record",
+        "type": "object",
+        "required": ["recordType", "source", "retrievedAt"],
+        "properties": {
+            "recordType": {
+                "type": "string",
+                "enum": ["worker", "shift", "schedulingEvent", "summary"],
+                "description": "Discriminator. Filter on this field in n8n."
+            },
+            "source": {
+                "type": "string",
+                "description": "Origin of the record as a whole: cal.com, workforce-metadata, demo-workforce-metadata or demo."
+            },
+            "retrievedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "UTC ISO-8601 timestamp of the run that produced this record."
+            },
+            "synthetic": {
+                "type": "boolean",
+                "description": "True when any part of the record is synthetic demo data rather than real scheduling data."
+            },
+            "fieldSources": {
+                "type": "object",
+                "description": "Per-field provenance map. Values are cal.com, workforce-metadata, demo-workforce-metadata, or derived:<basis>.",
+                "additionalProperties": { "type": "string" }
+            },
+            "employeeId": { "type": ["string", "null"], "description": "Stable worker identifier." },
+            "name": { "type": ["string", "null"] },
+            "email": { "type": ["string", "null"] },
+            "role": { "type": ["string", "null"] },
+            "department": { "type": ["string", "null"] },
+            "skills": { "type": "array", "items": { "type": "string" } },
+            "availability": {
+                "type": "array",
+                "description": "UTC availability windows.",
+                "items": {
+                    "type": "object",
+                    "required": ["start", "end"],
+                    "properties": {
+                        "start": { "type": "string", "format": "date-time" },
+                        "end": { "type": "string", "format": "date-time" },
+                        "source": { "type": "string" }
+                    }
+                }
+            },
+            "scheduledShifts": {
+                "type": "array",
+                "description": "IDs of shift records assigned to this worker inside the window.",
+                "items": { "type": "string" }
+            },
+            "hoursThisWeek": { "type": ["number", "null"] },
+            "contractedHoursPerWeek": { "type": ["number", "null"] },
+            "timeZone": { "type": ["string", "null"] },
+            "shiftId": { "type": ["string", "null"] },
+            "start": { "type": ["string", "null"], "format": "date-time" },
+            "end": { "type": ["string", "null"], "format": "date-time" },
+            "durationMinutes": { "type": ["number", "null"] },
+            "requiredSkills": { "type": "array", "items": { "type": "string" } },
+            "assignedEmployeeId": { "type": ["string", "null"] },
+            "assignedWorkerEmail": { "type": ["string", "null"] },
+            "status": { "type": ["string", "null"] },
+            "coverageStatus": { "type": ["string", "null"], "description": "covered or uncovered." },
+            "eventId": { "type": ["string", "null"] },
+            "participants": { "type": "array", "items": { "type": "object" } },
+            "sourceIds": { "type": "object", "description": "Identifiers as they exist in the source system." },
+            "lastUpdated": { "type": ["string", "null"], "format": "date-time" },
+            "counts": { "type": "object" },
+            "dateRange": { "type": "object" },
+            "warnings": { "type": "array", "items": { "type": "string" } }
+        }
+    },
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "description": "Every record type in the order they were written. The summary record is always last.",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "employeeId",
+                    "shiftId",
+                    "name",
+                    "role",
+                    "department",
+                    "start",
+                    "end",
+                    "status",
+                    "source",
+                    "synthetic",
+                    "retrievedAt"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Type", "format": "text" },
+                    "employeeId": { "label": "Employee ID", "format": "text" },
+                    "shiftId": { "label": "Shift ID", "format": "text" },
+                    "name": { "label": "Name", "format": "text" },
+                    "role": { "label": "Role", "format": "text" },
+                    "department": { "label": "Department", "format": "text" },
+                    "start": { "label": "Start (UTC)", "format": "date" },
+                    "end": { "label": "End (UTC)", "format": "date" },
+                    "status": { "label": "Status", "format": "text" },
+                    "source": { "label": "Source", "format": "text" },
+                    "synthetic": { "label": "Synthetic", "format": "boolean" },
+                    "retrievedAt": { "label": "Retrieved at", "format": "date" }
+                }
+            }
+        },
+        "workers": {
+            "title": "Workers",
+            "description": "Worker records: who exists, what they can do, when they are free and what they are already booked on.",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "employeeId",
+                    "name",
+                    "email",
+                    "role",
+                    "department",
+                    "skills",
+                    "availability",
+                    "scheduledShifts",
+                    "hoursThisWeek",
+                    "contractedHoursPerWeek",
+                    "timeZone",
+                    "source",
+                    "synthetic"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "employeeId": { "label": "Employee ID", "format": "text" },
+                    "name": { "label": "Name", "format": "text" },
+                    "email": { "label": "Email", "format": "text" },
+                    "role": { "label": "Role", "format": "text" },
+                    "department": { "label": "Department", "format": "text" },
+                    "skills": { "label": "Skills", "format": "array" },
+                    "availability": { "label": "Availability (UTC)", "format": "array" },
+                    "scheduledShifts": { "label": "Scheduled shifts", "format": "array" },
+                    "hoursThisWeek": { "label": "Hours this week", "format": "number" },
+                    "contractedHoursPerWeek": { "label": "Contracted h/week", "format": "number" },
+                    "timeZone": { "label": "Time zone", "format": "text" },
+                    "source": { "label": "Source", "format": "text" },
+                    "synthetic": { "label": "Synthetic", "format": "boolean" }
+                }
+            }
+        },
+        "shifts": {
+            "title": "Shifts",
+            "description": "Shift records derived from the scheduling system: when, what is required, who holds it.",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "shiftId",
+                    "start",
+                    "end",
+                    "durationMinutes",
+                    "role",
+                    "department",
+                    "requiredSkills",
+                    "assignedEmployeeId",
+                    "assignedWorkerEmail",
+                    "status",
+                    "coverageStatus",
+                    "lastUpdated",
+                    "source"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "shiftId": { "label": "Shift ID", "format": "text" },
+                    "start": { "label": "Start (UTC)", "format": "date" },
+                    "end": { "label": "End (UTC)", "format": "date" },
+                    "durationMinutes": { "label": "Minutes", "format": "number" },
+                    "role": { "label": "Role", "format": "text" },
+                    "department": { "label": "Department", "format": "text" },
+                    "requiredSkills": { "label": "Required skills", "format": "array" },
+                    "assignedEmployeeId": { "label": "Assigned employee", "format": "text" },
+                    "assignedWorkerEmail": { "label": "Assigned email", "format": "text" },
+                    "status": { "label": "Status", "format": "text" },
+                    "coverageStatus": { "label": "Coverage", "format": "text" },
+                    "lastUpdated": { "label": "Last updated", "format": "date" },
+                    "source": { "label": "Source", "format": "text" }
+                }
+            }
+        },
+        "events": {
+            "title": "Scheduling events",
+            "description": "Raw bookings as returned by the scheduling system, normalized but not interpreted.",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "eventId",
+                    "start",
+                    "end",
+                    "status",
+                    "name",
+                    "participants",
+                    "sourceIds",
+                    "lastUpdated",
+                    "source"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "eventId": { "label": "Event ID", "format": "text" },
+                    "start": { "label": "Start (UTC)", "format": "date" },
+                    "end": { "label": "End (UTC)", "format": "date" },
+                    "status": { "label": "Status", "format": "text" },
+                    "name": { "label": "Title", "format": "text" },
+                    "participants": { "label": "Participants", "format": "array" },
+                    "sourceIds": { "label": "Source IDs", "format": "object" },
+                    "lastUpdated": { "label": "Last updated", "format": "date" },
+                    "source": { "label": "Source", "format": "text" }
+                }
+            }
+        },
+        "summary": {
+            "title": "Run summary",
+            "description": "One record per run. Check status and emptyResult here before trusting an empty dataset.",
+            "transformation": {
+                "fields": ["recordType", "status", "source", "counts", "dateRange", "warnings", "retrievedAt"],
+                "desc": true,
+                "limit": 5
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "status": { "label": "Status", "format": "text" },
+                    "source": { "label": "Source", "format": "text" },
+                    "counts": { "label": "Counts", "format": "object" },
+                    "dateRange": { "label": "Date range", "format": "object" },
+                    "warnings": { "label": "Warnings", "format": "array" },
+                    "retrievedAt": { "label": "Retrieved at", "format": "date" }
+                }
+            }
+        }
+    }
+}

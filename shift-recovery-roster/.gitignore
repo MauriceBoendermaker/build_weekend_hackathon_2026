@@ -1,0 +1,11 @@
+node_modules
+dist
+storage/datasets
+storage/request_queues
+storage/key_value_stores/default/SUMMARY.json
+storage/key_value_stores/default/RUN_REPORT.json
+apify_storage
+crawlee_storage
+.venv
+*.log
+.DS_Store
