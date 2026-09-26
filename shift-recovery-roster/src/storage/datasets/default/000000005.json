@@ -1,0 +1,67 @@
+{
+	"recordType": "worker",
+	"employeeId": "E105",
+	"name": "Demo Lena Fischer",
+	"email": "demo-lena-fischer@demo.hospital.invalid",
+	"role": "ER_NURSE",
+	"department": "ER",
+	"skills": [
+		"ER",
+		"TRIAGE",
+		"BLS"
+	],
+	"availability": [
+		{
+			"start": "2026-09-26T17:45:02.986Z",
+			"end": "2026-09-26T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-27T06:00:00.000Z",
+			"end": "2026-09-27T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-28T06:00:00.000Z",
+			"end": "2026-09-28T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-29T07:00:00.000Z",
+			"end": "2026-09-29T17:45:02.986Z",
+			"source": "demo"
+		}
+	],
+	"scheduledShifts": [
+		"SHIFT-DEMO-demo-2026-09-28-er-night"
+	],
+	"hoursThisWeek": 0,
+	"contractedHoursPerWeek": 28,
+	"timeZone": "Europe/Berlin",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"calUserId": 9105,
+		"calUsername": "demo-lena-fischer"
+	},
+	"dataSources": [
+		"demo",
+		"demo-workforce-metadata"
+	],
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": null,
+	"fieldSources": {
+		"employeeId": "demo-workforce-metadata",
+		"name": "demo",
+		"email": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"skills": "demo-workforce-metadata",
+		"contractedHoursPerWeek": "demo-workforce-metadata",
+		"timeZone": "demo",
+		"availability": "demo",
+		"scheduledShifts": "demo",
+		"hoursThisWeek": "derived:scheduled-shifts-in-window"
+	}
+}

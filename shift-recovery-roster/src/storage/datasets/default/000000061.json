@@ -1,0 +1,37 @@
+{
+	"recordType": "schedulingEvent",
+	"eventId": "EVT-DEMO-demo-2026-09-27-ward_a-night",
+	"name": "Demo WARD_A night shift",
+	"start": "2026-09-27T23:00:00.000Z",
+	"end": "2026-09-28T07:00:00.000Z",
+	"durationMinutes": 480,
+	"status": "accepted",
+	"participants": [
+		{
+			"name": "Demo Ravi Menon",
+			"email": "demo-ravi-menon@demo.hospital.invalid",
+			"participantRole": "host",
+			"employeeId": "E108",
+			"timeZone": "Europe/Amsterdam"
+		}
+	],
+	"primaryWorkerEmployeeId": "E108",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600012,
+		"bookingUid": "demo-2026-09-27-ward_a-night",
+		"eventTypeId": 7009,
+		"eventTypeSlug": "ward-a-night-shift"
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"participants": "demo",
+		"primaryWorkerEmployeeId": "demo-workforce-metadata"
+	}
+}

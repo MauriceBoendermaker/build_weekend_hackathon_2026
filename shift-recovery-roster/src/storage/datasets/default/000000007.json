@@ -1,0 +1,70 @@
+{
+	"recordType": "worker",
+	"employeeId": "E107",
+	"name": "Demo Maja Novak",
+	"email": "demo-maja-novak@demo.hospital.invalid",
+	"role": "WARD_NURSE",
+	"department": "WARD_A",
+	"skills": [
+		"WARD",
+		"BLS",
+		"WOUND_CARE"
+	],
+	"availability": [
+		{
+			"start": "2026-09-26T17:45:02.986Z",
+			"end": "2026-09-26T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-27T07:00:00.000Z",
+			"end": "2026-09-27T15:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-28T06:00:00.000Z",
+			"end": "2026-09-28T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-29T07:00:00.000Z",
+			"end": "2026-09-29T15:00:00.000Z",
+			"source": "demo"
+		}
+	],
+	"scheduledShifts": [
+		"SHIFT-DEMO-demo-2026-09-26-ward_a-night",
+		"SHIFT-DEMO-demo-2026-09-27-ward_a-evening",
+		"SHIFT-DEMO-demo-2026-09-28-ward_a-night",
+		"SHIFT-DEMO-demo-2026-09-29-ward_a-evening"
+	],
+	"hoursThisWeek": 16,
+	"contractedHoursPerWeek": 32,
+	"timeZone": "Europe/Amsterdam",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"calUserId": 9107,
+		"calUsername": "demo-maja-novak"
+	},
+	"dataSources": [
+		"demo",
+		"demo-workforce-metadata"
+	],
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": null,
+	"fieldSources": {
+		"employeeId": "demo-workforce-metadata",
+		"name": "demo",
+		"email": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"skills": "demo-workforce-metadata",
+		"contractedHoursPerWeek": "demo-workforce-metadata",
+		"timeZone": "demo",
+		"availability": "demo",
+		"scheduledShifts": "demo",
+		"hoursThisWeek": "derived:scheduled-shifts-in-window"
+	}
+}

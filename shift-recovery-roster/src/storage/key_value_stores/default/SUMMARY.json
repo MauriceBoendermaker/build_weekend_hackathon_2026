@@ -1,0 +1,35 @@
+{
+  "recordType": "summary",
+  "status": "success",
+  "mode": "demo",
+  "sourceSystem": "demo",
+  "source": "demo",
+  "workforceMetadataSource": "demo",
+  "dateRange": {
+    "start": "2026-09-26T17:45:02.986Z",
+    "end": "2026-09-29T17:45:02.986Z"
+  },
+  "counts": {
+    "pagesFetched": 0,
+    "apiRequests": 0,
+    "rawEventsRetrieved": 36,
+    "rawWorkersDiscovered": 12,
+    "workersRetrieved": 12,
+    "shiftsRetrieved": 36,
+    "eventsRetrieved": 36,
+    "recordsNormalized": 84,
+    "recordsDiscarded": 0,
+    "duplicatesDropped": 0,
+    "workersWithoutMetadata": 0
+  },
+  "emptyResult": false,
+  "warnings": [
+    "Demo mode: all workers, shifts and availability are synthetic and must never be treated as real scheduling data."
+  ],
+  "errorCode": null,
+  "errorMessage": null,
+  "synthetic": true,
+  "retrievedAt": "2026-09-26T17:45:02.990Z",
+  "durationMs": 13,
+  "actorVersion": "1.0.0"
+}

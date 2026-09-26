@@ -1,0 +1,37 @@
+{
+	"recordType": "schedulingEvent",
+	"eventId": "EVT-DEMO-demo-2026-09-28-er-night",
+	"name": "Demo ER night shift",
+	"start": "2026-09-28T23:00:00.000Z",
+	"end": "2026-09-29T07:00:00.000Z",
+	"durationMinutes": 480,
+	"status": "accepted",
+	"participants": [
+		{
+			"name": "Demo Lena Fischer",
+			"email": "demo-lena-fischer@demo.hospital.invalid",
+			"participantRole": "host",
+			"employeeId": "E105",
+			"timeZone": "Europe/Berlin"
+		}
+	],
+	"primaryWorkerEmployeeId": "E105",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600021,
+		"bookingUid": "demo-2026-09-28-er-night",
+		"eventTypeId": 7006,
+		"eventTypeSlug": "er-night-shift"
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"participants": "demo",
+		"primaryWorkerEmployeeId": "demo-workforce-metadata"
+	}
+}

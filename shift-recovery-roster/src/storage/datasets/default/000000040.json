@@ -1,0 +1,38 @@
+{
+	"recordType": "shift",
+	"shiftId": "SHIFT-DEMO-demo-2026-09-28-ward_b-night",
+	"start": "2026-09-28T23:00:00.000Z",
+	"end": "2026-09-29T07:00:00.000Z",
+	"durationMinutes": 480,
+	"role": "WARD_NURSE",
+	"department": "WARD_B",
+	"requiredSkills": [
+		"WARD",
+		"BLS",
+		"ALS"
+	],
+	"assignedEmployeeId": null,
+	"assignedWorkerEmail": null,
+	"status": "pending",
+	"coverageStatus": "uncovered",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600027,
+		"bookingUid": "demo-2026-09-28-ward_b-night",
+		"eventTypeId": 7012,
+		"eventTypeSlug": "ward-b-night-shift",
+		"teamId": 8003
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"requiredSkills": "demo-workforce-metadata"
+	}
+}

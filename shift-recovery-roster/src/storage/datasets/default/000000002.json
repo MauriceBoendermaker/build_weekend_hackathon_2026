@@ -1,0 +1,72 @@
+{
+	"recordType": "worker",
+	"employeeId": "E102",
+	"name": "Demo Jonas Berg",
+	"email": "demo-jonas-berg@demo.hospital.invalid",
+	"role": "ICU_NURSE",
+	"department": "ICU",
+	"skills": [
+		"ICU",
+		"BLS",
+		"VENTILATOR"
+	],
+	"availability": [
+		{
+			"start": "2026-09-26T17:45:02.986Z",
+			"end": "2026-09-26T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-27T06:00:00.000Z",
+			"end": "2026-09-27T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-28T06:00:00.000Z",
+			"end": "2026-09-28T07:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-28T15:00:00.000Z",
+			"end": "2026-09-28T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-29T06:00:00.000Z",
+			"end": "2026-09-29T17:45:02.986Z",
+			"source": "demo"
+		}
+	],
+	"scheduledShifts": [
+		"SHIFT-DEMO-demo-2026-09-28-icu-day"
+	],
+	"hoursThisWeek": 0,
+	"contractedHoursPerWeek": 32,
+	"timeZone": "Europe/Amsterdam",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"calUserId": 9102,
+		"calUsername": "demo-jonas-berg"
+	},
+	"dataSources": [
+		"demo",
+		"demo-workforce-metadata"
+	],
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": null,
+	"fieldSources": {
+		"employeeId": "demo-workforce-metadata",
+		"name": "demo",
+		"email": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"skills": "demo-workforce-metadata",
+		"contractedHoursPerWeek": "demo-workforce-metadata",
+		"timeZone": "demo",
+		"availability": "demo",
+		"scheduledShifts": "demo",
+		"hoursThisWeek": "derived:scheduled-shifts-in-window"
+	}
+}

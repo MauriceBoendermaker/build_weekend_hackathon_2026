@@ -1,0 +1,38 @@
+{
+	"recordType": "shift",
+	"shiftId": "SHIFT-DEMO-demo-2026-09-27-ward_b-day",
+	"start": "2026-09-27T07:00:00.000Z",
+	"end": "2026-09-27T15:00:00.000Z",
+	"durationMinutes": 480,
+	"role": "WARD_NURSE",
+	"department": "WARD_B",
+	"requiredSkills": [
+		"WARD",
+		"BLS"
+	],
+	"assignedEmployeeId": "E109",
+	"assignedWorkerEmail": "demo-hanna-lund@demo.hospital.invalid",
+	"status": "scheduled",
+	"coverageStatus": "covered",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600013,
+		"bookingUid": "demo-2026-09-27-ward_b-day",
+		"eventTypeId": 7010,
+		"eventTypeSlug": "ward-b-day-shift",
+		"teamId": 8003
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"requiredSkills": "demo-workforce-metadata",
+		"assignedEmployeeId": "demo-workforce-metadata"
+	}
+}

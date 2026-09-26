@@ -1,0 +1,38 @@
+{
+	"recordType": "shift",
+	"shiftId": "SHIFT-DEMO-demo-2026-09-27-er-evening",
+	"start": "2026-09-27T15:00:00.000Z",
+	"end": "2026-09-27T23:00:00.000Z",
+	"durationMinutes": 480,
+	"role": "ER_NURSE",
+	"department": "ER",
+	"requiredSkills": [
+		"ER",
+		"TRIAGE",
+		"BLS"
+	],
+	"assignedEmployeeId": null,
+	"assignedWorkerEmail": null,
+	"status": "pending",
+	"coverageStatus": "uncovered",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600008,
+		"bookingUid": "demo-2026-09-27-er-evening",
+		"eventTypeId": 7005,
+		"eventTypeSlug": "er-evening-shift",
+		"teamId": 8001
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"requiredSkills": "demo-workforce-metadata"
+	}
+}

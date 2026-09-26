@@ -1,0 +1,29 @@
+{
+	"recordType": "schedulingEvent",
+	"eventId": "EVT-DEMO-demo-2026-09-29-er-evening",
+	"name": "Demo ER evening shift",
+	"start": "2026-09-29T15:00:00.000Z",
+	"end": "2026-09-29T23:00:00.000Z",
+	"durationMinutes": 480,
+	"status": "pending",
+	"participants": [],
+	"primaryWorkerEmployeeId": null,
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600031,
+		"bookingUid": "demo-2026-09-29-er-evening",
+		"eventTypeId": 7005,
+		"eventTypeSlug": "er-evening-shift"
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"participants": "demo",
+		"primaryWorkerEmployeeId": "derived:source-identity"
+	}
+}

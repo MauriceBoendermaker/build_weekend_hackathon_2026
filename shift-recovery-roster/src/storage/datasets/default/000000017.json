@@ -1,0 +1,38 @@
+{
+	"recordType": "shift",
+	"shiftId": "SHIFT-DEMO-demo-2026-09-27-icu-day",
+	"start": "2026-09-27T07:00:00.000Z",
+	"end": "2026-09-27T15:00:00.000Z",
+	"durationMinutes": 480,
+	"role": "ICU_NURSE",
+	"department": "ICU",
+	"requiredSkills": [
+		"ICU",
+		"BLS"
+	],
+	"assignedEmployeeId": "E110",
+	"assignedWorkerEmail": "demo-samuel-reyes@demo.hospital.invalid",
+	"status": "scheduled",
+	"coverageStatus": "covered",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"bookingId": 600004,
+		"bookingUid": "demo-2026-09-27-icu-day",
+		"eventTypeId": 7001,
+		"eventTypeSlug": "icu-day-shift",
+		"teamId": 8000
+	},
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": "2026-09-25T17:45:02.986Z",
+	"fieldSources": {
+		"start": "demo",
+		"end": "demo",
+		"status": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"requiredSkills": "demo-workforce-metadata",
+		"assignedEmployeeId": "demo-workforce-metadata"
+	}
+}

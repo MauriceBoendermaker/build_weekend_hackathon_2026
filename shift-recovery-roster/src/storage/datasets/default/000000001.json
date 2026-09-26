@@ -1,0 +1,68 @@
+{
+	"recordType": "worker",
+	"employeeId": "E101",
+	"name": "Demo Sarah Vos",
+	"email": "demo-sarah-vos@demo.hospital.invalid",
+	"role": "ICU_NURSE",
+	"department": "ICU",
+	"skills": [
+		"ICU",
+		"BLS",
+		"ALS",
+		"VENTILATOR"
+	],
+	"availability": [
+		{
+			"start": "2026-09-26T17:45:02.986Z",
+			"end": "2026-09-26T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-27T06:00:00.000Z",
+			"end": "2026-09-27T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-28T06:00:00.000Z",
+			"end": "2026-09-28T22:00:00.000Z",
+			"source": "demo"
+		},
+		{
+			"start": "2026-09-29T06:00:00.000Z",
+			"end": "2026-09-29T15:00:00.000Z",
+			"source": "demo"
+		}
+	],
+	"scheduledShifts": [
+		"SHIFT-DEMO-demo-2026-09-29-icu-evening"
+	],
+	"hoursThisWeek": 0,
+	"contractedHoursPerWeek": 36,
+	"timeZone": "Europe/Amsterdam",
+	"sourceSystem": "demo",
+	"sourceIds": {
+		"calUserId": 9101,
+		"calUsername": "demo-sarah-vos"
+	},
+	"dataSources": [
+		"demo",
+		"demo-workforce-metadata"
+	],
+	"source": "demo",
+	"synthetic": true,
+	"retrievedAt": "2026-09-26T17:45:02.990Z",
+	"lastUpdated": null,
+	"fieldSources": {
+		"employeeId": "demo-workforce-metadata",
+		"name": "demo",
+		"email": "demo",
+		"role": "demo-workforce-metadata",
+		"department": "demo-workforce-metadata",
+		"skills": "demo-workforce-metadata",
+		"contractedHoursPerWeek": "demo-workforce-metadata",
+		"timeZone": "demo",
+		"availability": "demo",
+		"scheduledShifts": "demo",
+		"hoursThisWeek": "derived:scheduled-shifts-in-window"
+	}
+}

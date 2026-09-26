@@ -1,7 +1,9 @@
 {
-    "mode": "demo",
+    "mode": "live",
+    "apiKey": "cal_live_890514f497464d313ea129c12ffac455",
     "startTime": "now",
-    "endTime": "now+3d",
+    "endTime": "now+7d",
+    "bookingStatuses": ["upcoming"],
     "emitSchedulingEvents": true,
-    "debug": false
+    "debug": true
 }
