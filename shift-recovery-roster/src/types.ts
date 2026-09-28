@@ -11,12 +11,13 @@
  */
 
 /** Where a value came from. `derived:*` means this Actor computed it from other retrieved data. */
-export type Provenance = 'cal.com' | 'workforce-metadata' | 'demo-workforce-metadata' | 'demo' | `derived:${string}`;
+export type Provenance =
+    'cal.com' | 'ical' | 'workforce-metadata' | 'demo-workforce-metadata' | 'demo' | `derived:${string}`;
 
 export type RecordType = 'worker' | 'shift' | 'schedulingEvent' | 'summary';
 
 /** The scheduling system a record was retrieved from. */
-export type SourceSystem = 'cal.com' | 'demo';
+export type SourceSystem = 'cal.com' | 'ical' | 'demo';
 
 export type ShiftStatus = 'scheduled' | 'pending' | 'cancelled' | 'completed' | 'unknown';
 

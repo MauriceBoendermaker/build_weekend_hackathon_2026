@@ -8,7 +8,7 @@
 
 import { CredentialsMissingError, InputError } from './errors.js';
 import { resolveRange, type ResolvedRange } from './time.js';
-import type { Provenance } from './types.js';
+import type { Provenance, SourceSystem } from './types.js';
 
 export type Mode = 'live' | 'hybrid' | 'demo';
 
@@ -47,6 +47,13 @@ export interface ResolvedInput {
     mode: Mode;
     apiKey: string;
     baseUrl: string;
+    /**
+     * iCalendar feed to read instead of Cal.com. Often a secret address (Google's "secret
+     * address in iCal format"), so it is treated like a credential: never logged, never quoted.
+     */
+    icsUrl: string | null;
+    /** Events whose title starts with this (case-insensitive) are reported sick: cancelled, not worked. */
+    sickPrefix: string;
     range: ResolvedRange;
     teamIds: number[];
     eventTypeIds: number[];
@@ -97,7 +104,8 @@ export function parseInput(raw: unknown, options: ParseInputOptions = {}): Resol
         now,
     );
 
-    const apiKey = resolveApiKey(input.apiKey, env, mode);
+    const icsUrl = resolveIcsUrl(input.icsUrl, env);
+    const apiKey = resolveApiKey(input.apiKey, env, mode, icsUrl !== null);
     const baseUrl = normalizeBaseUrl(asString(input.baseUrl, 'https://api.cal.com/v2', 'baseUrl'));
 
     const statuses = asStringArray(input.bookingStatuses, ['upcoming'], 'bookingStatuses');
@@ -115,6 +123,8 @@ export function parseInput(raw: unknown, options: ParseInputOptions = {}): Resol
         mode,
         apiKey,
         baseUrl,
+        icsUrl,
+        sickPrefix: asString(input.sickPrefix, 'ZIEK', 'sickPrefix').trim(),
         range,
         teamIds: asIdArray(input.teamIds, 'teamIds'),
         eventTypeIds: asIdArray(input.eventTypeIds, 'eventTypeIds'),
@@ -153,7 +163,10 @@ export function parseInput(raw: unknown, options: ParseInputOptions = {}): Resol
 export function describeConfig(input: ResolvedInput): Record<string, unknown> {
     return {
         mode: input.mode,
+        sourceSystem: sourceSystemFor(input),
         baseUrl: input.baseUrl,
+        icsConfigured: input.icsUrl !== null,
+        sickPrefix: input.sickPrefix,
         credentialProvided: input.apiKey !== '',
         credentialKind: input.apiKey === '' ? 'none' : classifyKey(input.apiKey),
         window: { start: input.range.start, end: input.range.end, days: Number(input.range.durationDays.toFixed(2)) },
@@ -195,12 +208,38 @@ function classifyKey(apiKey: string): string {
     return 'opaque';
 }
 
-function resolveApiKey(value: unknown, env: Record<string, string | undefined>, mode: Mode): string {
+/** Which source adapter this configuration selects. Mirrors `createSource()` in the pipeline. */
+export function sourceSystemFor(input: Pick<ResolvedInput, 'mode' | 'icsUrl'>): SourceSystem {
+    if (input.mode === 'demo') return 'demo';
+    return input.icsUrl === null ? 'cal.com' : 'ical';
+}
+
+/**
+ * The feed URL may carry a secret token in its path, so validation errors describe the
+ * problem without echoing the value. `webcal://` is the same feed over HTTPS.
+ */
+function resolveIcsUrl(value: unknown, env: Record<string, string | undefined>): string | null {
+    const raw = asOptionalString(value) ?? asOptionalString(env.ICS_URL);
+    if (raw === null) return null;
+    let url: URL;
+    try {
+        url = new URL(raw.replace(/^webcal:\/\//i, 'https://'));
+    } catch {
+        throw new InputError('"icsUrl" is not a valid URL.');
+    }
+    if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
+        throw new InputError('"icsUrl" must use HTTPS (or webcal://).');
+    }
+    return url.toString();
+}
+
+function resolveApiKey(value: unknown, env: Record<string, string | undefined>, mode: Mode, usesIcal: boolean): string {
     const fromInput = asOptionalString(value);
     const fromEnv = asOptionalString(env.CAL_COM_API_KEY);
     const apiKey = fromInput ?? fromEnv ?? '';
 
-    if (mode === 'demo') return apiKey;
+    // Neither the demo roster nor an iCal feed talks to Cal.com.
+    if (mode === 'demo' || usesIcal) return apiKey;
 
     if (apiKey === '') {
         throw new CredentialsMissingError(

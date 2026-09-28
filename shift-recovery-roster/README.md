@@ -180,9 +180,37 @@ demonstrably real and not just an aspiration:
 
 ```
 CalComSource      ─┐
+IcalSource        ─┤
 DemoRosterSource  ─┼─▶ Normalizer ─▶ WorkforceDataset
 HospitalRoster…   ─┘   (your adapter goes here)
 ```
+
+### iCal feeds: any calendar as the roster
+
+`IcalSource` (`src/sources/ical/source.ts`) reads the roster from any calendar that publishes an
+iCalendar feed. It needs no Cal.com account: set `icsUrl` (or the `ICS_URL` environment variable)
+and the Actor uses it instead of Cal.com.
+
+| Calendar                  | Where to find the feed                                             |
+| ------------------------- | ------------------------------------------------------------------ |
+| Google Calendar           | Calendar settings → *Integrate calendar* → *Secret address in iCal format* |
+| Outlook / Microsoft 365   | Settings → Calendar → Shared calendars → *Publish a calendar* → ICS |
+| iCloud                    | Calendar → Share → *Public Calendar* (use the `webcal://` link)    |
+
+Mapping:
+
+- every **timed** event overlapping the window is a shift; recurring events are expanded
+  (Google-style instance ids, `<uid>_<UTC start>`), all-day events are ignored;
+- the event's **guests** are the people working it — the organizer, rooms and anyone who
+  declined are skipped — and they are matched to `employeeMetadata` by email;
+- a title starting with **`sickPrefix`** (default `ZIEK`) means the shift was reported sick: it is
+  emitted as `cancelled` and not counted towards `hoursThisWeek`;
+- every `employeeMetadata` entry with an email becomes a worker, even with no shift in the window;
+- the feed has no availability, so a person is available whenever they are not on a shift in the
+  window, unless `employeeMetadata[].availability` narrows it.
+
+The feed address usually embeds a secret token. It is handled like a credential: never logged,
+never quoted in an error. Store it as the secret `ICS_URL` environment variable on the Actor.
 
 ## Input
 

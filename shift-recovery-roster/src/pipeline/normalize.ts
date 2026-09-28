@@ -123,7 +123,14 @@ function resolveIdentities(snapshot: RawSnapshot, context: NormalizeContext): Ma
 }
 
 function idPrefix(sourceSystem: SourceSystem): string {
-    return sourceSystem === 'cal.com' ? 'CAL' : 'DEMO';
+    if (sourceSystem === 'cal.com') return 'CAL';
+    if (sourceSystem === 'ical') return 'ICAL';
+    return 'DEMO';
+}
+
+/** The provenance label for values that came straight from a source system. */
+export function sourceProvenance(sourceSystem: SourceSystem): Provenance {
+    return sourceSystem;
 }
 
 /** Deterministic fallback employee ID, derived from the most stable identifier available. */
@@ -146,7 +153,7 @@ function normalizeEvents(
 ): SchedulingEventRecord[] {
     const records: SchedulingEventRecord[] = [];
     const { range } = context.input;
-    const provenance: Provenance = snapshot.sourceSystem === 'demo' ? 'demo' : 'cal.com';
+    const provenance = sourceProvenance(snapshot.sourceSystem);
 
     for (const event of snapshot.events) {
         const identifier = eventIdentifier(event);
@@ -264,7 +271,7 @@ function buildShifts(
     context: NormalizeContext,
     identities: Map<string, Identity>,
 ): ShiftRecord[] {
-    const provenance: Provenance = snapshot.sourceSystem === 'demo' ? 'demo' : 'cal.com';
+    const provenance = sourceProvenance(snapshot.sourceSystem);
     const eventsBySourceId = new Map(snapshot.events.map((event) => [eventIdentifier(event), event]));
     const identityByEmployeeId = new Map([...identities.values()].map((identity) => [identity.employeeId, identity]));
     const nowMs = Date.parse(context.retrievedAt);
@@ -378,18 +385,17 @@ function buildWorkers(
         const { person, metadata } = identity;
         const employee = metadata?.employee ?? null;
         const metadataProvenance = metadata?.provenance ?? null;
-        const sourceProvenance: Provenance = snapshot.sourceSystem === 'demo' ? 'demo' : 'cal.com';
+        const provenance = sourceProvenance(snapshot.sourceSystem);
         if (metadata === null) withoutMetadata += 1;
 
         const fieldSources: Record<string, Provenance> = { employeeId: identity.employeeIdProvenance };
 
         const name = person.name ?? employee?.name ?? null;
-        if (name !== null)
-            fieldSources.name = person.name !== null ? sourceProvenance : (metadataProvenance as Provenance);
+        if (name !== null) fieldSources.name = person.name !== null ? provenance : (metadataProvenance as Provenance);
 
         const email = person.email ?? employee?.email ?? null;
         if (email !== null)
-            fieldSources.email = person.email !== null ? sourceProvenance : (metadataProvenance as Provenance);
+            fieldSources.email = person.email !== null ? provenance : (metadataProvenance as Provenance);
 
         if (employee?.role != null) fieldSources.role = metadataProvenance as Provenance;
         if (employee?.department != null) fieldSources.department = metadataProvenance as Provenance;
@@ -397,26 +403,26 @@ function buildWorkers(
         if (employee?.contractedHoursPerWeek != null) {
             fieldSources.contractedHoursPerWeek = metadataProvenance as Provenance;
         }
-        if (person.timeZone !== null) fieldSources.timeZone = sourceProvenance;
+        if (person.timeZone !== null) fieldSources.timeZone = provenance;
 
         const availability = buildAvailability(
             availabilityByPerson.get(person.key)?.windows ?? [],
-            sourceProvenance,
+            provenance,
             employee?.availability ?? [],
             metadataProvenance,
             range.startMs,
             range.endMs,
         );
-        if (availability.length > 0) fieldSources.availability = availability[0]?.source ?? sourceProvenance;
+        if (availability.length > 0) fieldSources.availability = availability[0]?.source ?? provenance;
 
         const assignedShifts = shiftsByEmployee.get(identity.employeeId) ?? [];
         const scheduledShifts = assignedShifts.map((shift) => shift.shiftId).sort();
-        if (scheduledShifts.length > 0) fieldSources.scheduledShifts = sourceProvenance;
+        if (scheduledShifts.length > 0) fieldSources.scheduledShifts = provenance;
 
         const hoursThisWeek = computeHoursThisWeek(assignedShifts, week.startMs, week.endMs);
         fieldSources.hoursThisWeek = 'derived:scheduled-shifts-in-window';
 
-        const dataSources: Provenance[] = [sourceProvenance];
+        const dataSources: Provenance[] = [provenance];
         if (metadataProvenance !== null) dataSources.push(metadataProvenance);
 
         workers.push({
@@ -435,7 +441,7 @@ function buildWorkers(
             sourceSystem: snapshot.sourceSystem,
             sourceIds: { calUserId: person.externalId, calUsername: person.username },
             dataSources,
-            source: sourceProvenance,
+            source: provenance,
             synthetic: snapshot.sourceSystem === 'demo' || metadataProvenance === 'demo-workforce-metadata',
             retrievedAt: context.retrievedAt,
             lastUpdated: null,

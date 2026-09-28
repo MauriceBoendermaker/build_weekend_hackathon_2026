@@ -33,6 +33,20 @@
             "default": "https://api.cal.com/v2",
             "prefill": "https://api.cal.com/v2"
         },
+        "icsUrl": {
+            "title": "iCal feed URL (instead of Cal.com)",
+            "type": "string",
+            "description": "Read the roster from any calendar's iCalendar (.ics) feed instead of Cal.com - e.g. Google Calendar's \"secret address in iCal format\", an Outlook published calendar or iCloud. Each timed event is a shift; its guests (not the organizer) are the people working it. No Cal.com key is needed when this is set. Treated as a secret: never logged. Falls back to the ICS_URL environment variable.",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "sickPrefix": {
+            "title": "Sick-report title prefix (iCal)",
+            "type": "string",
+            "description": "An iCal event whose title starts with this text (case-insensitive) was reported sick: it is emitted as a cancelled shift and not counted towards hours.",
+            "editor": "textfield",
+            "default": "ZIEK"
+        },
         "startTime": {
             "sectionCaption": "Time window",
             "sectionDescription": "All timestamps in the output are ISO-8601 in UTC. Date-only values are interpreted as UTC midnight.",

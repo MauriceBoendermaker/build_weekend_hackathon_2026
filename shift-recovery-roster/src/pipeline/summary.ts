@@ -8,10 +8,11 @@
  */
 
 import type { RosterError } from '../errors.js';
-import type { ResolvedInput } from '../input.js';
+import { sourceSystemFor, type ResolvedInput } from '../input.js';
 import type { MetadataOrigin } from '../metadata/loader.js';
 import type { RawSnapshot } from '../sources/source.js';
 import type { NormalizedBundle, RunCounts, RunStatus, SummaryRecord } from '../types.js';
+import { sourceProvenance } from './normalize.js';
 
 /** Bumped by hand alongside `version` in `.actor/actor.json`. */
 export const ACTOR_VERSION = '1.0.0';
@@ -61,12 +62,14 @@ export function buildSummary(context: SummaryContext): SummaryRecord {
         );
     }
 
+    const sourceSystem = snapshot?.sourceSystem ?? sourceSystemFor(input);
+
     return {
         recordType: 'summary',
         status,
         mode: input.mode,
-        sourceSystem: snapshot?.sourceSystem ?? (input.mode === 'demo' ? 'demo' : 'cal.com'),
-        source: snapshot?.sourceSystem === 'demo' ? 'demo' : 'cal.com',
+        sourceSystem,
+        source: sourceProvenance(sourceSystem),
         workforceMetadataSource: resolveMetadataSource(context.metadataOrigins),
         dateRange: { start: input.range.start, end: input.range.end },
         counts,

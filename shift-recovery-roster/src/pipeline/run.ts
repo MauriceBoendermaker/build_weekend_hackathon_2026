@@ -10,11 +10,12 @@
 import { log } from 'apify';
 
 import { EmptyResultError } from '../errors.js';
-import type { ResolvedInput } from '../input.js';
+import { sourceSystemFor, type ResolvedInput } from '../input.js';
 import { loadWorkforceMetadata, MetadataIndex, ShiftTypeIndex, type MetadataLoaderDeps } from '../metadata/loader.js';
 import { writeOutput, type OutputDeps, type RunReport } from '../output/dataset.js';
 import { CalComSource } from '../sources/calcom/source.js';
 import { DemoRosterSource } from '../sources/demo/source.js';
+import { IcalSource } from '../sources/ical/source.js';
 import type { RosterSource } from '../sources/source.js';
 import type { NormalizedBundle, SummaryRecord } from '../types.js';
 import { dedupeBundle } from './dedupe.js';
@@ -38,7 +39,9 @@ export interface RunResult {
 
 /** Picks the adapter for the configured mode. The only place a source is chosen. */
 export function createSource(input: ResolvedInput): RosterSource {
-    if (input.mode === 'demo') return new DemoRosterSource(input);
+    const system = sourceSystemFor(input);
+    if (system === 'demo') return new DemoRosterSource(input);
+    if (system === 'ical') return new IcalSource({ input });
     return new CalComSource({ input });
 }
 
